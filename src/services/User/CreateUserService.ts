@@ -82,7 +82,7 @@ class CreateUserService {
 
 			var newJunction = taxUserJunctionRepository.create({ 
 				fk_user_id: userId,
-				fk_full_table_id: taxTableId
+				fk_table_id: taxTableId
 			});
 			
 			await taxUserJunctionRepository.save(newJunction);

@@ -18,7 +18,7 @@ class UserJunctionTables1673512450804 {
                 name: "users_tax_junction",
                 columns: [
                     { name: "junction_id", type: "uuid", isPrimary: true },
-                    { name: "fk_tax_table_id", type: "uuid" },
+                    { name: "fk_table_id", type: "uuid" },
                     { name: "fk_user_id", type: "uuid" }
                 ],
                 foreignKeys: [
@@ -26,7 +26,7 @@ class UserJunctionTables1673512450804 {
                         name: "FKFullTableConnection",
                         referencedTableName: "tax_tables",
                         referencedColumnNames: ["table_id"],
-                        columnNames: ["fk_tax_table_id"],
+                        columnNames: ["fk_table_id"],
                         onDelete: "CASCADE",
                         onUpdate: "CASCADE"
                     },

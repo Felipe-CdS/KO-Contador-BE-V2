@@ -3,13 +3,13 @@ import { CreateNewTransactionService } from "../../services/Transaction/CreateNe
 
 class CreateNewTransactionController {
 	async handle(request: Request, response: Response){
-		const { comission_entries, number_identifier } = request.body;
+		const { comission_entries, number_identifier, transaction_date } = request.body;
 
         const service = new CreateNewTransactionService();
         
-        const newTx = await service.execute({ comission_entries, number_identifier }, request.user_id);
+        const newTx = await service.execute({ comission_entries, number_identifier, transaction_date }, request.user_id);
 
-		var returnJSON = {...newTx, username: newTx.fk_user_id.username, tax_type: newTx.fk_tax_id.number_identifier};
+		var returnJSON = {...newTx, username: newTx.fk_user_id.username, tax_name: newTx.fk_tax_id.tax_name};
 
 		delete returnJSON.transaction_id;
 		delete returnJSON.fk_user_id;

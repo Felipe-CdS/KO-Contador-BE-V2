@@ -14,10 +14,10 @@ const CreateNewTransactionService_1 = require("../../services/Transaction/Create
 class CreateNewTransactionController {
     handle(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { comission_entries, number_identifier } = request.body;
+            const { comission_entries, number_identifier, transaction_date } = request.body;
             const service = new CreateNewTransactionService_1.CreateNewTransactionService();
-            const newTx = yield service.execute({ comission_entries, number_identifier }, request.user_id);
-            var returnJSON = Object.assign(Object.assign({}, newTx), { username: newTx.fk_user_id.username, tax_type: newTx.fk_tax_id.number_identifier });
+            const newTx = yield service.execute({ comission_entries, number_identifier, transaction_date }, request.user_id);
+            var returnJSON = Object.assign(Object.assign({}, newTx), { username: newTx.fk_user_id.username, tax_name: newTx.fk_tax_id.tax_name });
             delete returnJSON.transaction_id;
             delete returnJSON.fk_user_id;
             delete returnJSON.fk_tax_id;

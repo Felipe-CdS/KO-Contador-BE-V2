@@ -78,7 +78,7 @@ class CreateUserService {
                 var taxTableId = yield fullTableRepository.findOne({ number_identifier: tax_types[i] });
                 var newJunction = taxUserJunctionRepository.create({
                     fk_user_id: userId,
-                    fk_full_table_id: taxTableId
+                    fk_table_id: taxTableId
                 });
                 yield taxUserJunctionRepository.save(newJunction);
             }

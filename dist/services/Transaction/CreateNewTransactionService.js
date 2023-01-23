@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateNewTransactionService = void 0;
 const typeorm_1 = require("typeorm");
 const TaxTableRepositories_1 = require("../../repositories/TaxTableRepositories");
+const TaxUserJunctionRepositories_1 = require("../../repositories/TaxUserJunctionRepositories");
 const TransactionRepositories_1 = require("../../repositories/TransactionRepositories");
 const UserRepositories_1 = require("../../repositories/UserRepositories");
 class CreateNewTransactionService {
@@ -67,16 +68,61 @@ class CreateNewTransactionService {
             return (this.truncateDecimals(effectiveRate, 2));
         });
     }
-    execute({ comission_entries, number_identifier }, user_id) {
+    getRepartitionTablePercentage(taxTable, rbt_12) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var rangeRow = null;
+            var repatitionRange = null;
+            (taxTable.rows).map((elem) => {
+                if (rbt_12 >= elem.min_value && rbt_12 < elem.max_value)
+                    rangeRow = elem;
+            });
+            (taxTable.repartition_table).map((elem) => {
+                if (elem.range == rangeRow.range)
+                    repatitionRange = elem;
+            });
+            return repatitionRange.ISS;
+        });
+    }
+    checkOtherTransactionThisMonth(date, user_id, number_identifier, transactionRepository, taxTableRepository) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userTransactions = yield transactionRepository.find({
+                where: { fk_user_id: user_id },
+                order: { transaction_date: 'DESC' }
+            });
+            for (let i = 0; i < userTransactions.length; i++) {
+                let elem = userTransactions[i];
+                if (elem.transaction_date.getMonth() == date.getMonth() && elem.transaction_date.getFullYear() == date.getFullYear()) {
+                    if (elem.fk_tax_id.number_identifier == Number(number_identifier))
+                        return true;
+                }
+            }
+            return false;
+        });
+    }
+    execute({ comission_entries, number_identifier, transaction_date }, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             const transactionRepository = (0, typeorm_1.getCustomRepository)(TransactionRepositories_1.TransactionRepositories);
             const taxTableRepository = (0, typeorm_1.getCustomRepository)(TaxTableRepositories_1.TaxTableRepositories);
             const userRepository = (0, typeorm_1.getCustomRepository)(UserRepositories_1.UserRepositories);
+            const junctionRepository = (0, typeorm_1.getCustomRepository)(TaxUserJunctionRepositories_1.TaxUserJunctionRepositories);
             const user = yield userRepository.findOne({ user_id });
-            const taxTable = yield taxTableRepository.findOne({ number_identifier });
+            if (!user)
+                throw new Error("Usuário não encontrado.");
+            const taxTable = yield taxTableRepository.findOne({ number_identifier: number_identifier });
+            if (!taxTable)
+                throw new Error("Anexo não encontrado.");
+            const userJunction = yield junctionRepository.find({ where: { fk_user_id: user.user_id, fk_table_id: taxTable.table_id } });
+            if (!userJunction)
+                throw new Error("Usuario não tem um cadastro válido nesse anexo.");
+            const checkThisMonth = yield this.checkOtherTransactionThisMonth(new Date(transaction_date), user_id, number_identifier, transactionRepository, taxTableRepository);
+            if (checkThisMonth)
+                throw new Error("Já existe uma entrada para esse anexo nesse mês.");
             const thisMonthTotal = this.getThisMonthEntriesTotal(comission_entries);
             const rbt_12 = yield this.getRBT12(user_id, thisMonthTotal, transactionRepository);
             const effective_tax_percentage = yield this.getEffectiveTaxPercentage(taxTable, rbt_12);
+            const repartition_table_iss_percentage = yield this.getRepartitionTablePercentage(taxTable, rbt_12);
+            if (!rbt_12 || !repartition_table_iss_percentage)
+                throw new Error("Parece que sua conta ultrapassou as faixas do Simples Nacional.");
             const tx = {
                 fk_user_id: user,
                 comission_total: thisMonthTotal,
@@ -84,8 +130,9 @@ class CreateNewTransactionService {
                 rbt_12,
                 fk_tax_id: taxTable,
                 effective_tax_percentage,
-                repartition_table_iss_percentage: 2123213,
-                comission_entries: comission_entries
+                repartition_table_iss_percentage,
+                comission_entries: comission_entries,
+                transaction_date: new Date(transaction_date)
             };
             const newTx = transactionRepository.create(tx);
             yield transactionRepository.save(newTx);

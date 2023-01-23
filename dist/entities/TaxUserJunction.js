@@ -31,10 +31,10 @@ __decorate([
     __metadata("design:type", User_1.User)
 ], TaxUserJunction.prototype, "fk_user_id", void 0);
 __decorate([
-    (0, typeorm_1.JoinColumn)({ name: "fk_full_table_id" }),
+    (0, typeorm_1.JoinColumn)({ name: "fk_table_id" }),
     (0, typeorm_1.ManyToOne)(() => TaxTable_1.TaxTable, { eager: true }),
     __metadata("design:type", TaxTable_1.TaxTable)
-], TaxUserJunction.prototype, "fk_full_table_id", void 0);
+], TaxUserJunction.prototype, "fk_table_id", void 0);
 TaxUserJunction = __decorate([
     (0, typeorm_1.Entity)("users_tax_junction"),
     __metadata("design:paramtypes", [])

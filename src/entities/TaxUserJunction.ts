@@ -13,9 +13,9 @@ class TaxUserJunction {
     @ManyToOne( () => User, {eager:true})
 	fk_user_id: User;
 
-	@JoinColumn({name: "fk_full_table_id"})
+	@JoinColumn({name: "fk_table_id"})
     @ManyToOne( () => TaxTable, {eager:true})
-	fk_full_table_id: TaxTable;
+	fk_table_id: TaxTable;
 
 	constructor(){
 		if(!this.junction_id){

@@ -3,6 +3,7 @@ import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTax
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
 import { CreateUserController } from "./controllers/User/CreateUserController";
+import { GetUserTaxTypesController } from "./controllers/User/GetUserTaxTypesController";
 import { LoginUserController } from "./controllers/User/LoginUserController";
 import { UpdatePasswordController } from "./controllers/User/UpdatePasswordController";
 import { ensureAdmin } from "./middlewares/ensureAdmin";
@@ -16,6 +17,7 @@ const getSingleTaxTableController		= new GetSingleTaxTableController();
 const createUserController				= new CreateUserController();
 const loginUserController				= new LoginUserController();
 const updatePasswordController 			= new UpdatePasswordController();
+const getUserTaxTypesController			= new GetUserTaxTypesController();
 
 const createNewTransactionController 	=	new CreateNewTransactionController();
 
@@ -25,6 +27,7 @@ router.get("/tax-tables/:number_identifier",	ensureAdmin,	getSingleTaxTableContr
 router.put("/users/change-password",			ensureAuth,		updatePasswordController.handle );
 router.post("/users/auth/signup",				ensureAdmin,	createUserController.handle );
 router.post("/users/auth/signin",								loginUserController.handle );
+router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle );
 
 router.post("/transactions",					ensureAuth,		createNewTransactionController.handle );
 
@@ -53,7 +56,7 @@ router.post("/transactions",					ensureAuth,		createNewTransactionController.han
 // router.put("/tax-tables",						ensureAdmin,	updateFullTableController.handle );
 // router.delete("/tax-tables/:number_identifier",	ensureAdmin,	deleteFullTableController.handle );
 
-// router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle );
+
 // router.get("/users/all",							ensureAdmin,	getAllUsersController.handle );
 // router.get("/users/page/:page",					ensureAdmin,	getUsersByPageController.handle );
 // router.get("/users/:username",					ensureAdmin,	getUsersByNameController.handle );

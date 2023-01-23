@@ -12,7 +12,7 @@ class Transaction {
 	readonly transaction_id: string;
 
 	@JoinColumn({name: "fk_user_id"})
-    @ManyToOne( () => User)
+    @ManyToOne( () => User, {eager:true})
 	fk_user_id: User;
 
 	@Column()
@@ -25,7 +25,7 @@ class Transaction {
 	rbt_12: number;
 
 	@JoinColumn({name: "fk_tax_id"})
-    @ManyToOne( () => TaxTable)
+    @ManyToOne( () => TaxTable, {eager:true})
 	fk_tax_id: TaxTable;
 
 	@Column()

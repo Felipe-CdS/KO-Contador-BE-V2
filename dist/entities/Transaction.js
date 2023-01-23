@@ -28,7 +28,7 @@ __decorate([
 ], Transaction.prototype, "transaction_id", void 0);
 __decorate([
     (0, typeorm_1.JoinColumn)({ name: "fk_user_id" }),
-    (0, typeorm_1.ManyToOne)(() => User_1.User),
+    (0, typeorm_1.ManyToOne)(() => User_1.User, { eager: true }),
     __metadata("design:type", User_1.User)
 ], Transaction.prototype, "fk_user_id", void 0);
 __decorate([
@@ -45,7 +45,7 @@ __decorate([
 ], Transaction.prototype, "rbt_12", void 0);
 __decorate([
     (0, typeorm_1.JoinColumn)({ name: "fk_tax_id" }),
-    (0, typeorm_1.ManyToOne)(() => TaxTable_1.TaxTable),
+    (0, typeorm_1.ManyToOne)(() => TaxTable_1.TaxTable, { eager: true }),
     __metadata("design:type", TaxTable_1.TaxTable)
 ], Transaction.prototype, "fk_tax_id", void 0);
 __decorate([

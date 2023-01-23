@@ -14,8 +14,6 @@ class LoginUserService {
 
         const user = await userRepository.findOne({ email });
 
-		console.log(user);
-
         if(!user)
             throw new Error("Invalid Email/Password!");
 

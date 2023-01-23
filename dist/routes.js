@@ -6,6 +6,7 @@ const CreateNewTaxTableController_1 = require("./controllers/TaxTable/CreateNewT
 const GetSingleTaxTableController_1 = require("./controllers/TaxTable/GetSingleTaxTableController");
 const CreateNewTransactionController_1 = require("./controllers/Transaction/CreateNewTransactionController");
 const CreateUserController_1 = require("./controllers/User/CreateUserController");
+const GetUserTaxTypesController_1 = require("./controllers/User/GetUserTaxTypesController");
 const LoginUserController_1 = require("./controllers/User/LoginUserController");
 const UpdatePasswordController_1 = require("./controllers/User/UpdatePasswordController");
 const ensureAdmin_1 = require("./middlewares/ensureAdmin");
@@ -17,12 +18,14 @@ const getSingleTaxTableController = new GetSingleTaxTableController_1.GetSingleT
 const createUserController = new CreateUserController_1.CreateUserController();
 const loginUserController = new LoginUserController_1.LoginUserController();
 const updatePasswordController = new UpdatePasswordController_1.UpdatePasswordController();
+const getUserTaxTypesController = new GetUserTaxTypesController_1.GetUserTaxTypesController();
 const createNewTransactionController = new CreateNewTransactionController_1.CreateNewTransactionController();
 router.post("/tax-tables", ensureAdmin_1.ensureAdmin, createNewTaxTableController.handle);
 router.get("/tax-tables/:number_identifier", ensureAdmin_1.ensureAdmin, getSingleTaxTableController.handle);
 router.put("/users/change-password", ensureAuth_1.ensureAuth, updatePasswordController.handle);
 router.post("/users/auth/signup", ensureAdmin_1.ensureAdmin, createUserController.handle);
 router.post("/users/auth/signin", loginUserController.handle);
+router.get("/users/tax-types", ensureAuth_1.ensureAuth, getUserTaxTypesController.handle);
 router.post("/transactions", ensureAuth_1.ensureAuth, createNewTransactionController.handle);
 // const getFullTableController	=			new GetFullTableController();
 // const getAllFullTablesController =		new GetAllFullTablesController();
@@ -41,7 +44,6 @@ router.post("/transactions", ensureAuth_1.ensureAuth, createNewTransactionContro
 // router.post("/tax-tables",						ensureAdmin,	createFullTableController.handle );
 // router.put("/tax-tables",						ensureAdmin,	updateFullTableController.handle );
 // router.delete("/tax-tables/:number_identifier",	ensureAdmin,	deleteFullTableController.handle );
-// router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle );
 // router.get("/users/all",							ensureAdmin,	getAllUsersController.handle );
 // router.get("/users/page/:page",					ensureAdmin,	getUsersByPageController.handle );
 // router.get("/users/:username",					ensureAdmin,	getUsersByNameController.handle );

@@ -2,6 +2,7 @@ import { getCustomRepository } from "typeorm";
 import { TaxTable, ITaxRow, IRepartitionTable } from "../../entities/TaxTable";
 import { ICommissionEntry } from "../../entities/Transaction";
 import { TaxTableRepositories } from "../../repositories/TaxTableRepositories";
+import { TaxUserJunctionRepositories } from "../../repositories/TaxUserJunctionRepositories";
 import { TransactionRepositories } from "../../repositories/TransactionRepositories";
 import { UserRepositories } from "../../repositories/UserRepositories";
 
@@ -89,21 +90,68 @@ class CreateNewTransactionService {
 				repatitionRange = elem;
 		});
 
+
+
 		return repatitionRange.ISS;
 	}
 
-	async execute({ comission_entries, number_identifier }, user_id: string){
+	private async checkOtherTransactionThisMonth(date: Date, user_id: string, 
+												number_identifier: number,
+												transactionRepository: TransactionRepositories,
+												taxTableRepository: TaxTableRepositories){
+
+		const userTransactions = await transactionRepository.find({
+			where: { fk_user_id: user_id }, 
+			order: { transaction_date: 'DESC'}
+		});
+
+		for(let i = 0; i < userTransactions.length; i++){
+			let elem = userTransactions[i];
+
+			if(elem.transaction_date.getMonth() == date.getMonth() && elem.transaction_date.getFullYear() == date.getFullYear())
+			{
+				if(elem.fk_tax_id.number_identifier == Number(number_identifier))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	async execute({ comission_entries, number_identifier, transaction_date }, user_id: string){
 		
 		const transactionRepository = getCustomRepository(TransactionRepositories);
 		const taxTableRepository 	= getCustomRepository(TaxTableRepositories);
 		const userRepository		= getCustomRepository(UserRepositories);
+		const junctionRepository	= getCustomRepository(TaxUserJunctionRepositories);
 
 		const user 								= await userRepository.findOne({ user_id });
-		const taxTable 							= await taxTableRepository.findOne({ number_identifier });		
+
+		if(!user)
+			throw new Error("Usuário não encontrado.");
+
+		const taxTable 							= await taxTableRepository.findOne({ number_identifier: number_identifier });
+
+		if(!taxTable)
+			throw new Error("Anexo não encontrado.");
+
+		const userJunction						= await junctionRepository.find({ where: {fk_user_id: user.user_id, fk_table_id: taxTable.table_id} });
+
+		if(!userJunction)
+			throw new Error("Usuario não tem um cadastro válido nesse anexo.");
+
+		const checkThisMonth					= await this.checkOtherTransactionThisMonth(new Date(transaction_date), user_id, number_identifier, transactionRepository, taxTableRepository);
+
+		if(checkThisMonth)
+			throw new Error("Já existe uma entrada para esse anexo nesse mês.");
+
 		const thisMonthTotal 					= this.getThisMonthEntriesTotal(comission_entries);
 		const rbt_12							= await this.getRBT12(user_id, thisMonthTotal, transactionRepository);
 		const effective_tax_percentage			= await this.getEffectiveTaxPercentage(taxTable, rbt_12);
 		const repartition_table_iss_percentage	= await this.getRepartitionTablePercentage(taxTable, rbt_12);
+
+		if(!rbt_12 || !repartition_table_iss_percentage)
+			throw new Error("Parece que sua conta ultrapassou as faixas do Simples Nacional.");
 	
 		const tx = {
 			fk_user_id: user,
@@ -113,7 +161,8 @@ class CreateNewTransactionService {
 			fk_tax_id: taxTable,
 			effective_tax_percentage,
 			repartition_table_iss_percentage,
-			comission_entries: comission_entries
+			comission_entries: comission_entries,
+			transaction_date: new Date(transaction_date)
 		};
 
 		const newTx = transactionRepository.create(tx);

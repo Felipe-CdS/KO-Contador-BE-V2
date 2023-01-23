@@ -32,7 +32,8 @@ class UserTables1673414880150 {
                     { name: "admin", type: "boolean", default: false }
                 ]
             }));
-            let hashPassword = yield (0, bcryptjs_1.hash)(process.env.ADMIN_PASSWORD, 12);
+            let hashAdminPassword = yield (0, bcryptjs_1.hash)(process.env.ADMIN_PASSWORD, 12);
+            let hashUserPassword = yield (0, bcryptjs_1.hash)(process.env.USER_PASSWORD, 12);
             yield queryRunner
                 .manager
                 .createQueryBuilder()
@@ -41,9 +42,21 @@ class UserTables1673414880150 {
                 .values({
                 user_id: (0, uuid_1.v4)(),
                 username: "ADMIN",
-                password: hashPassword,
+                password: hashAdminPassword,
                 email: process.env.ADMIN_EMAIL,
                 admin: true
+            })
+                .execute();
+            yield queryRunner
+                .manager
+                .createQueryBuilder()
+                .insert()
+                .into("users")
+                .values({
+                user_id: (0, uuid_1.v4)(),
+                username: "USER",
+                password: hashUserPassword,
+                email: process.env.USER_EMAIL
             })
                 .execute();
         });
