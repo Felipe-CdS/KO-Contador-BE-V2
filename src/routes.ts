@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTaxTableController";
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
+import { GetTransactionsByYearController } from "./controllers/Transaction/GetTransactionsByYearController";
 import { CreateUserController } from "./controllers/User/CreateUserController";
 import { GetUserTaxTypesController } from "./controllers/User/GetUserTaxTypesController";
 import { LoginUserController } from "./controllers/User/LoginUserController";
@@ -19,17 +20,19 @@ const loginUserController				= new LoginUserController();
 const updatePasswordController 			= new UpdatePasswordController();
 const getUserTaxTypesController			= new GetUserTaxTypesController();
 
-const createNewTransactionController 	=	new CreateNewTransactionController();
+const createNewTransactionController 	= new CreateNewTransactionController();
+const getTransactionsByYearController	= new GetTransactionsByYearController();
 
 router.post("/tax-tables",						ensureAdmin,	createNewTaxTableController.handle);
 router.get("/tax-tables/:number_identifier",	ensureAdmin,	getSingleTaxTableController.handle);
 
-router.put("/users/change-password",			ensureAuth,		updatePasswordController.handle );
-router.post("/users/auth/signup",				ensureAdmin,	createUserController.handle );
-router.post("/users/auth/signin",								loginUserController.handle );
-router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle );
+router.put("/users/change-password",			ensureAuth,		updatePasswordController.handle);
+router.post("/users/auth/signup",				ensureAdmin,	createUserController.handle);
+router.post("/users/auth/signin",								loginUserController.handle);
+router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle);
 
-router.post("/transactions",					ensureAuth,		createNewTransactionController.handle );
+router.post("/transactions",					ensureAuth,		createNewTransactionController.handle);
+router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearController.handle);
 
 
 // const getFullTableController	=			new GetFullTableController();

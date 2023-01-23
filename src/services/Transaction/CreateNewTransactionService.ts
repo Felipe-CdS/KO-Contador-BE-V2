@@ -140,6 +140,8 @@ class CreateNewTransactionService {
 		if(!userJunction)
 			throw new Error("Usuario não tem um cadastro válido nesse anexo.");
 
+		console.log(new Date(transaction_date));
+
 		const checkThisMonth					= await this.checkOtherTransactionThisMonth(new Date(transaction_date), user_id, number_identifier, transactionRepository, taxTableRepository);
 
 		if(checkThisMonth)
