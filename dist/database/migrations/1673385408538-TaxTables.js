@@ -25,9 +25,7 @@ class TaxTables1673385408538 {
                     { name: "repartition_table", type: "jsonb" }
                 ]
             }));
-            let holder = [taxType1, taxType2, taxType3, taxType4, taxType5];
-            for (let i = 0; i < holder.length; i++) {
-                let elem = holder[i];
+            for (let i = 0; i < 5; i++) {
                 yield queryRunner
                     .manager
                     .createQueryBuilder()
@@ -35,10 +33,24 @@ class TaxTables1673385408538 {
                     .into("tax_tables")
                     .values({
                     table_id: (0, uuid_1.v4)(),
-                    number_identifier: elem.number_identifier,
-                    tax_name: elem.tax_name,
-                    rows: elem.rows,
-                    repartition_table: elem.repartition_table
+                    number_identifier: (i + 1),
+                    tax_name: "Anexo 1 – Comércio",
+                    rows: [
+                        { range: 1, min_value: 0, max_value: 180000, tax_percentage: 0.06, discount_value: 0 },
+                        { range: 2, min_value: 180000.01, max_value: 360000, tax_percentage: 0.112, discount_value: 9360 },
+                        { range: 3, min_value: 360000.01, max_value: 720000, tax_percentage: 0.135, discount_value: 17640 },
+                        { range: 4, min_value: 720000.01, max_value: 1800000, tax_percentage: 0.16, discount_value: 35640 },
+                        { range: 5, min_value: 1800000.01, max_value: 3600000, tax_percentage: 0.21, discount_value: 125640 },
+                        { range: 6, min_value: 3600000.01, max_value: 4800000, tax_percentage: 0.33, discount_value: 648000 }
+                    ],
+                    repartition_table: [
+                        { range: 1, IRPJ: 0.04, CSLL: 0.035, COFINS: 0.1282, PIS_PASEP: 0.0278, CPP: 0.4340, ISS: 0.3350 },
+                        { range: 2, IRPJ: 0.04, CSLL: 0.035, COFINS: 0.1405, PIS_PASEP: 0.0305, CPP: 0.4340, ISS: 0.3200 },
+                        { range: 3, IRPJ: 0.04, CSLL: 0.035, COFINS: 0.1364, PIS_PASEP: 0.0296, CPP: 0.4340, ISS: 0.3250 },
+                        { range: 4, IRPJ: 0.04, CSLL: 0.035, COFINS: 0.1364, PIS_PASEP: 0.0296, CPP: 0.4340, ISS: 0.3250 },
+                        { range: 5, IRPJ: 0.04, CSLL: 0.035, COFINS: 0.1282, PIS_PASEP: 0.0278, CPP: 0.4340, ISS: 0.3350 },
+                        { range: 6, IRPJ: 0.35, CSLL: 0.150, COFINS: 0.1603, PIS_PASEP: 0.0346, CPP: 0.3050, ISS: 0.0500 }
+                    ]
                 })
                     .execute();
             }
