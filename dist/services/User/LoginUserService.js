@@ -14,12 +14,13 @@ const typeorm_1 = require("typeorm");
 const jsonwebtoken_1 = require("jsonwebtoken");
 const UserRepositories_1 = require("../../repositories/UserRepositories");
 const User_1 = require("../../entities/User");
+const TaxUserJunctionRepositories_1 = require("../../repositories/TaxUserJunctionRepositories");
 class LoginUserService {
     execute({ email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             const userRepository = (0, typeorm_1.getCustomRepository)(UserRepositories_1.UserRepositories);
+            const junctionRepository = (0, typeorm_1.getCustomRepository)(TaxUserJunctionRepositories_1.TaxUserJunctionRepositories);
             const user = yield userRepository.findOne({ email });
-            console.log(user);
             if (!user)
                 throw new Error("Invalid Email/Password!");
             const passwordMatch = yield User_1.User.comparePassword(password, user.password);
@@ -29,9 +30,13 @@ class LoginUserService {
             if (!user.updated_at)
                 firstLogin = true;
             const token = (0, jsonwebtoken_1.sign)({ email: user.email }, process.env.HASH_SECRET, { subject: user.user_id, expiresIn: "1d" });
+            const userTaxJunctions = yield junctionRepository.find({ fk_user_id: user });
+            var taxTypes = [];
+            for (let i = 0; i < userTaxJunctions.length; i++)
+                taxTypes.push(userTaxJunctions[i].fk_table_id.number_identifier);
             if (user.admin)
                 return ({ token, role: true, firstLogin });
-            return ({ token, firstLogin });
+            return ({ token, firstLogin, username: user.username, taxTypes });
         });
     }
 }

@@ -30,7 +30,10 @@ export class TaxTables1673385408538 implements MigrationInterface {
 				.values(
 					{
 						table_id: uuid(),
-						...elem
+						number_identifier: elem.number_identifier,
+						tax_name: elem.tax_name,
+						rows: elem.rows,
+						repartition_table: elem.repartition_table
 					}
 				)
 				.execute();

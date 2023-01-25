@@ -33,7 +33,13 @@ class TaxTables1673385408538 {
                     .createQueryBuilder()
                     .insert()
                     .into("tax_tables")
-                    .values(Object.assign({ table_id: (0, uuid_1.v4)() }, elem))
+                    .values({
+                    table_id: (0, uuid_1.v4)(),
+                    number_identifier: elem.number_identifier,
+                    tax_name: elem.tax_name,
+                    rows: elem.rows,
+                    repartition_table: elem.repartition_table
+                })
                     .execute();
             }
         });
