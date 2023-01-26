@@ -73,7 +73,7 @@ class CreateNewTransactionService {
 		
 		var effectiveRate = ((rbt_12 * rangeRow.tax_percentage) - rangeRow.discount_value) / rbt_12;
 
-		return (this.truncateDecimals(effectiveRate, 2));		
+		return (effectiveRate);		
 	}
 
 	private async getRepartitionTablePercentage(taxTable: TaxTable, rbt_12: number){
