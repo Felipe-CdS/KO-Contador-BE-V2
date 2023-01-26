@@ -8,6 +8,7 @@ import { GetTxByYearAndTaxTypeController } from "./controllers/Transaction/GetTx
 import { CreateUserController } from "./controllers/User/CreateUserController";
 import { GetUserTaxTypesController } from "./controllers/User/GetUserTaxTypesController";
 import { LoginUserController } from "./controllers/User/LoginUserController";
+import { UpdateEmailController } from "./controllers/User/UpdateEmailController";
 import { UpdatePasswordController } from "./controllers/User/UpdatePasswordController";
 import { ensureAdmin } from "./middlewares/ensureAdmin";
 import { ensureAuth } from "./middlewares/ensureAuth";
@@ -20,6 +21,7 @@ const getSingleTaxTableController		= new GetSingleTaxTableController();
 const createUserController				= new CreateUserController();
 const loginUserController				= new LoginUserController();
 const updatePasswordController 			= new UpdatePasswordController();
+const updateEmailController				= new UpdateEmailController();
 const getUserTaxTypesController			= new GetUserTaxTypesController();
 
 const createNewTransactionController 	= new CreateNewTransactionController();
@@ -30,9 +32,10 @@ const getTxByYearAndTaxTypeController	= new GetTxByYearAndTaxTypeController();
 router.post("/tax-tables",						ensureAdmin,	createNewTaxTableController.handle);
 router.get("/tax-tables/:number_identifier",	ensureAdmin,	getSingleTaxTableController.handle);
 
-router.put("/users/change-password",			ensureAuth,		updatePasswordController.handle);
-router.post("/users/auth/signup",				ensureAdmin,	createUserController.handle);
 router.post("/users/auth/signin",								loginUserController.handle);
+router.put("/users/change-password",			ensureAuth,		updatePasswordController.handle);
+router.put("/users/change-email",				ensureAuth,		updateEmailController.handle);
+router.post("/users/auth/signup",				ensureAdmin,	createUserController.handle);
 router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle);
 
 router.post("/transactions",					ensureAuth,		createNewTransactionController.handle);
