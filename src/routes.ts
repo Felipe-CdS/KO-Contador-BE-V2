@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTaxTableController";
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
+import { GetSingleTransactionController } from "./controllers/Transaction/GetSingleTransactionController";
 import { GetTransactionsByYearController } from "./controllers/Transaction/GetTransactionsByYearController";
 import { GetTxByYearAndTaxTypeController } from "./controllers/Transaction/GetTxByYearAndTaxTypeController";
 import { CreateUserController } from "./controllers/User/CreateUserController";
@@ -23,6 +24,7 @@ const getUserTaxTypesController			= new GetUserTaxTypesController();
 
 const createNewTransactionController 	= new CreateNewTransactionController();
 const getTransactionsByYearController	= new GetTransactionsByYearController();
+const getSingleTransactionController	= new GetSingleTransactionController();
 const getTxByYearAndTaxTypeController	= new GetTxByYearAndTaxTypeController();
 
 router.post("/tax-tables",						ensureAdmin,	createNewTaxTableController.handle);
@@ -36,40 +38,7 @@ router.get("/users/tax-types",					ensureAuth,		getUserTaxTypesController.handle
 router.post("/transactions",					ensureAuth,		createNewTransactionController.handle);
 router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearController.handle);
 router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.handle);
-
-
-// const getFullTableController	=			new GetFullTableController();
-// const getAllFullTablesController =		new GetAllFullTablesController();
-// const createFullTableController =		new CreateFullTableController();
-// const updateFullTableController =		new UpdateFullTableController();
-// const deleteFullTableController =		new DeleteFullTableController();
-
-// const getUserTaxTypesController =		new GetUserTaxTypesController();
-// const getAllUsersController		=		new GetAllUsersController();
-// const getUsersByPageController	=		new GetUsersByPageController();
-// const getUsersByNameController	=		new GetUsersByNameController();
-
-
-// const deleteUserController		=		new DeleteUserController();
-// const editUserController		=			new EditUserController();
-
-// const getTransactionsController = 		new GetTransactionsController();
-
-
-// router.get("/tax-tables/:number_identifier",		ensureAdmin,	getFullTableController.handle );
-// router.get("/tax-tables",						ensureAdmin,	getAllFullTablesController.handle );
-// router.post("/tax-tables",						ensureAdmin,	createFullTableController.handle );
-// router.put("/tax-tables",						ensureAdmin,	updateFullTableController.handle );
-// router.delete("/tax-tables/:number_identifier",	ensureAdmin,	deleteFullTableController.handle );
-
-
-// router.get("/users/all",							ensureAdmin,	getAllUsersController.handle );
-// router.get("/users/page/:page",					ensureAdmin,	getUsersByPageController.handle );
-// router.get("/users/:username",					ensureAdmin,	getUsersByNameController.handle );
-// router.put("/users",								ensureAdmin,	editUserController.handle );
-// router.delete("/users",							ensureAdmin,	deleteUserController.handle );
-
-// router.get("/transactions",						ensureAuth,		getTransactionsController.handle );
+router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
 
 
 router.get("/",	(req: Request, res: Response) => { res.status(200).json({ statusMessage: "OK" }) });
