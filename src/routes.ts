@@ -50,6 +50,6 @@ router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.ha
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
 
 
-router.get("/",	(req: Request, res: Response) => { res.status(200).json({ statusMessage: "OK" }) });
+router.get("/",	(req: Request, res: Response) => { res.status(200).json({ statusMessage: "OK OK" }) });
 
 export { router }
