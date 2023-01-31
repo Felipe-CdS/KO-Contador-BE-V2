@@ -1,12 +1,12 @@
-import { getCustomRepository } from "typeorm"
+import { getCustomRepository, Like } from "typeorm"
 import { TaxUserJunctionRepositories } from "../../repositories/TaxUserJunctionRepositories";
 import { UserRepositories } from "../../repositories/UserRepositories";
 
-class GetUsersByPageService {
-    async execute({ page }){
+class SearchUserByNameService {
+    async execute({ search_username }){
         const userRepository = getCustomRepository(UserRepositories);
 		const taxUserJunctionRepository	= getCustomRepository(TaxUserJunctionRepositories);
-        var [users, total] = await userRepository.findAndCount({take: 11, skip: ((page - 1) * 11)});
+        var users = await userRepository.find({ where: {username: Like(`%${search_username}%`) }});
 		
 		var users = users.filter((e) => {return e.admin == false});
 
@@ -25,8 +25,8 @@ class GetUsersByPageService {
 			responseArray.push({username: elem.username, email: elem.email, updated_at: elem.updated_at, tax_types: elemJunctionsArray});
 		}
 
-        return({users: responseArray, total});
+        return({users: responseArray });
     }
 }
 
-export { GetUsersByPageService }
+export { SearchUserByNameService }

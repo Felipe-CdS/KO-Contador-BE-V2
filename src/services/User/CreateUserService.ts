@@ -55,11 +55,12 @@ class CreateUserService {
 		if(nameAlreadyExists)
 			throw new Error("Esse nome de usuário já existe.");
 
-		if(tax_types.length == 0)
+		if(!tax_types || tax_types.length == 0)
 			throw new Error("Selecione pelo menos 1 anexo.");
 
 
 		for(let i = 0; i < tax_types.length; i++){
+			tax_types[i] = Number(tax_types[i]);
 			var checkTaxTableExists =  await fullTableRepository.findOne({ number_identifier: tax_types[i] });
 			if(!checkTaxTableExists)
 				throw new Error("Um ou mais anexos não existem.");
