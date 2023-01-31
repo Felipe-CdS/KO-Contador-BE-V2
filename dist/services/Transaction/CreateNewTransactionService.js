@@ -65,7 +65,7 @@ class CreateNewTransactionService {
             if (!rangeRow)
                 throw new Error("Desculpe, algo deu errado... Aparentemente a sua receita bruta dos ultimos 12 meses ultrapassou o limite de faturamento anual do Simples Nacional. Consulte o seu contador para mais detalhes.");
             var effectiveRate = ((rbt_12 * rangeRow.tax_percentage) - rangeRow.discount_value) / rbt_12;
-            return (this.truncateDecimals(effectiveRate, 2));
+            return (effectiveRate);
         });
     }
     getRepartitionTablePercentage(taxTable, rbt_12) {

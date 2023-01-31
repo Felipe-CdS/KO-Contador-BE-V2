@@ -11,7 +11,7 @@ class CreateNewTaxTableService {
 		const identifierAlreadyExists = await taxTableRepository.findOne({ number_identifier });
 
 		if(identifierAlreadyExists)
-			throw new Error("Identifier already exists...");
+			throw new Error("Já existe um anexo com esse número.");
 
 		if(!tax_name)
 			tax_name = "Tabela sem nome";

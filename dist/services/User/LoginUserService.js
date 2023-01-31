@@ -26,17 +26,14 @@ class LoginUserService {
             const passwordMatch = yield User_1.User.comparePassword(password, user.password);
             if (!passwordMatch)
                 throw new Error("Invalid Email/Password!");
-            var firstLogin = false;
-            if (!user.updated_at)
-                firstLogin = true;
             const token = (0, jsonwebtoken_1.sign)({ email: user.email }, process.env.HASH_SECRET, { subject: user.user_id, expiresIn: "1d" });
             const userTaxJunctions = yield junctionRepository.find({ fk_user_id: user });
             var taxTypes = [];
             for (let i = 0; i < userTaxJunctions.length; i++)
                 taxTypes.push(userTaxJunctions[i].fk_table_id.number_identifier);
             if (user.admin)
-                return ({ token, role: true, firstLogin });
-            return ({ token, firstLogin, username: user.username, taxTypes });
+                return ({ token, role: true, username: user.username, taxTypes: [] });
+            return ({ token, username: user.username, taxTypes });
         });
     }
 }
