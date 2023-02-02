@@ -1,11 +1,14 @@
 import { Router, Request, Response } from "express";
 import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTaxTableController";
+import { EditTaxTableController } from "./controllers/TaxTable/EditTaxTableController";
 import { GetAllTaxTablesController } from "./controllers/TaxTable/GetAllTaxTablesController";
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
+import { AdminGetUserTxByYearAndTaxTypeController } from "./controllers/Transaction/AdminGetUserTxByYearAndTaxTypeController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
 import { GetSingleTransactionController } from "./controllers/Transaction/GetSingleTransactionController";
 import { GetTransactionsByYearController } from "./controllers/Transaction/GetTransactionsByYearController";
 import { GetTxByYearAndTaxTypeController } from "./controllers/Transaction/GetTxByYearAndTaxTypeController";
+import { AdminGetUserTaxTypesController } from "./controllers/User/AdminGetUserTaxTypes";
 import { CreateUserController } from "./controllers/User/CreateUserController";
 import { DeleteUserController } from "./controllers/User/DeleteUserController";
 import { GetUsersByPageController } from "./controllers/User/GetUsersByPageController";
@@ -19,25 +22,30 @@ import { ensureAuth } from "./middlewares/ensureAuth";
 
 const router = Router();
 
-const createNewTaxTableController		= new CreateNewTaxTableController();
-const getAllTaxTablesController			= new GetAllTaxTablesController();
-const getSingleTaxTableController		= new GetSingleTaxTableController();
+const createNewTaxTableController				= new CreateNewTaxTableController();
+const editTaxTableController					= new EditTaxTableController();
+const getAllTaxTablesController					= new GetAllTaxTablesController();
+const getSingleTaxTableController				= new GetSingleTaxTableController();
 
-const createUserController				= new CreateUserController();
-const loginUserController				= new LoginUserController();
-const updatePasswordController 			= new UpdatePasswordController();
-const updateEmailController				= new UpdateEmailController();
-const getUserTaxTypesController			= new GetUserTaxTypesController();
-const getUsersByPageController			= new GetUsersByPageController();
-const deleteUserController				= new DeleteUserController();
-const searchUserByNameController		= new SearchUserByNameController();
+const createUserController						= new CreateUserController();
+const loginUserController						= new LoginUserController();
+const updatePasswordController 					= new UpdatePasswordController();
+const updateEmailController						= new UpdateEmailController();
+const getUserTaxTypesController					= new GetUserTaxTypesController();
+const getUsersByPageController					= new GetUsersByPageController();
+const deleteUserController						= new DeleteUserController();
+const searchUserByNameController				= new SearchUserByNameController();
 
-const createNewTransactionController 	= new CreateNewTransactionController();
-const getTransactionsByYearController	= new GetTransactionsByYearController();
-const getSingleTransactionController	= new GetSingleTransactionController();
-const getTxByYearAndTaxTypeController	= new GetTxByYearAndTaxTypeController();
+const createNewTransactionController 			= new CreateNewTransactionController();
+const getTransactionsByYearController			= new GetTransactionsByYearController();
+const getSingleTransactionController			= new GetSingleTransactionController();
+const getTxByYearAndTaxTypeController			= new GetTxByYearAndTaxTypeController();
+
+const adminGetUserTaxTypesController			= new AdminGetUserTaxTypesController();
+const adminGetUserTxByYearAndTaxTypeController	= new AdminGetUserTxByYearAndTaxTypeController();
 
 router.post("/tax-tables",						ensureAdmin,	createNewTaxTableController.handle);
+router.post("/tax-tables/edit",					ensureAdmin,	editTaxTableController.handle);
 router.get("/tax-tables/all",					ensureAdmin,	getAllTaxTablesController.handle);
 router.get("/tax-tables/:number_identifier",	ensureAdmin,	getSingleTaxTableController.handle);
 
@@ -54,6 +62,9 @@ router.post("/transactions",					ensureAuth,		createNewTransactionController.han
 router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearController.handle);
 router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.handle);
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
+
+router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTaxTypeController.handle);
+router.get("/admin/tax-types/:username",		ensureAdmin,	adminGetUserTaxTypesController.handle);
 
 
 router.get("/",	(req: Request, res: Response) => { res.status(200).json({ statusMessage: "OK OK" }) });
