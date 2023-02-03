@@ -51,6 +51,7 @@ class TransactionTables1673511974710 {
     }
     down(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield queryRunner.dropTable("transactions");
         });
     }
 }

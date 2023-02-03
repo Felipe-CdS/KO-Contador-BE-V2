@@ -18,7 +18,7 @@ class CreateNewTaxTableService {
             const taxTableRepository = (0, typeorm_1.getCustomRepository)(TaxTableRepositories_1.TaxTableRepositories);
             const identifierAlreadyExists = yield taxTableRepository.findOne({ number_identifier });
             if (identifierAlreadyExists)
-                throw new Error("Identifier already exists...");
+                throw new Error("Já existe um anexo com esse número.");
             if (!tax_name)
                 tax_name = "Tabela sem nome";
             const newTable = taxTableRepository.create({ tax_name, number_identifier, rows, repartition_table });

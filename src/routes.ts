@@ -1,8 +1,12 @@
 import { Router, Request, Response } from "express";
+import { CreateNewInsurerController } from "./controllers/Insurer/CreateNewInsurerController";
+import { DeleteInsurerController } from "./controllers/Insurer/DeleteInsurerController";
+import { GetAllInsurersController } from "./controllers/Insurer/GetAllInsurersController";
 import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTaxTableController";
 import { EditTaxTableController } from "./controllers/TaxTable/EditTaxTableController";
 import { GetAllTaxTablesController } from "./controllers/TaxTable/GetAllTaxTablesController";
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
+import { AdminGetSingleTransactionController } from "./controllers/Transaction/AdminGetSIngleTransactionController";
 import { AdminGetUserTxByYearAndTaxTypeController } from "./controllers/Transaction/AdminGetUserTxByYearAndTaxTypeController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
 import { GetSingleTransactionController } from "./controllers/Transaction/GetSingleTransactionController";
@@ -42,7 +46,12 @@ const getSingleTransactionController			= new GetSingleTransactionController();
 const getTxByYearAndTaxTypeController			= new GetTxByYearAndTaxTypeController();
 
 const adminGetUserTaxTypesController			= new AdminGetUserTaxTypesController();
+const adminGetSingleTransactionController		= new AdminGetSingleTransactionController();
 const adminGetUserTxByYearAndTaxTypeController	= new AdminGetUserTxByYearAndTaxTypeController();
+
+const createNewInsurerController				= new CreateNewInsurerController();
+const getAllInsurersController					= new GetAllInsurersController();
+const deleteInsurerController					= new DeleteInsurerController();
 
 router.post("/tax-tables",						ensureAdmin,	createNewTaxTableController.handle);
 router.post("/tax-tables/edit",					ensureAdmin,	editTaxTableController.handle);
@@ -64,8 +73,12 @@ router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.ha
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
 
 router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTaxTypeController.handle);
+router.get("/admin/single-transaction",			ensureAdmin,	adminGetSingleTransactionController.handle);
 router.get("/admin/tax-types/:username",		ensureAdmin,	adminGetUserTaxTypesController.handle);
 
+router.post("/insurers",						ensureAdmin,	createNewInsurerController.handle);
+router.get("/insurers",							ensureAdmin,	getAllInsurersController.handle);
+router.delete("/insurers",						ensureAdmin,	deleteInsurerController.handle);
 
 router.get("/",	(req: Request, res: Response) => { res.status(200).json({ statusMessage: "OK OK" }) });
 

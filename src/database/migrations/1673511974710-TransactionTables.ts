@@ -39,6 +39,7 @@ export class TransactionTables1673511974710 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.dropTable("transactions");
     }
 
 }
