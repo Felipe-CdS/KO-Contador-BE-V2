@@ -1,4 +1,5 @@
 import { Between, getCustomRepository } from "typeorm";
+import { User } from "../../entities/User";
 import { TransactionRepositories } from "../../repositories/TransactionRepositories";
 import { UserRepositories } from "../../repositories/UserRepositories";
 
@@ -8,14 +9,20 @@ class AdminGetSingleTransactionService {
 		const transactionRepository = getCustomRepository(TransactionRepositories);
 		const userRepository		= getCustomRepository(UserRepositories);
 
-		const user_id = await userRepository.findOne({ username });
+		const found = await userRepository.findOne({ username });
+
+		if(!found)
+			throw new Error("Usuário não encontrado");
 
         var search = await transactionRepository.find({
 				where: { 
-					fk_user_id: user_id,
-					transaction_date: Between(new Date(year, (month-1), 1), new Date(year, (month-1), 31))
+					fk_user_id: found.user_id,
+					transaction_date: Between(new Date(year, (month-1), 1), new Date(year, (month-1), 31)) 
 				}
 		});
+
+		if(search.length == 0)
+			return null;
 
 		for(let i = (search.length -1); i >= 0; i--)
 		{

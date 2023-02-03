@@ -14,6 +14,9 @@ class AdminGetSingleTransactionController {
 			tax_type: request.query.tax_type
 		});
 
+		if(!found)
+			return response.status(404).json();
+
 		var returnJSON = {...found, username: found.fk_user_id.username, tax_name: found.fk_tax_id.tax_name};
 
 		delete returnJSON.transaction_id;

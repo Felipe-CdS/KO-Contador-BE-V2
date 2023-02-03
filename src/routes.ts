@@ -6,6 +6,7 @@ import { CreateNewTaxTableController } from "./controllers/TaxTable/CreateNewTax
 import { EditTaxTableController } from "./controllers/TaxTable/EditTaxTableController";
 import { GetAllTaxTablesController } from "./controllers/TaxTable/GetAllTaxTablesController";
 import { GetSingleTaxTableController } from "./controllers/TaxTable/GetSingleTaxTableController";
+import { AdminCreateNewTransactionController } from "./controllers/Transaction/AdminCreateNewTransactionController";
 import { AdminGetSingleTransactionController } from "./controllers/Transaction/AdminGetSIngleTransactionController";
 import { AdminGetUserTxByYearAndTaxTypeController } from "./controllers/Transaction/AdminGetUserTxByYearAndTaxTypeController";
 import { CreateNewTransactionController } from "./controllers/Transaction/CreateNewTransactionController";
@@ -46,6 +47,7 @@ const getSingleTransactionController			= new GetSingleTransactionController();
 const getTxByYearAndTaxTypeController			= new GetTxByYearAndTaxTypeController();
 
 const adminGetUserTaxTypesController			= new AdminGetUserTaxTypesController();
+const adminCreateNewTransactionService			= new AdminCreateNewTransactionController();
 const adminGetSingleTransactionController		= new AdminGetSingleTransactionController();
 const adminGetUserTxByYearAndTaxTypeController	= new AdminGetUserTxByYearAndTaxTypeController();
 
@@ -72,6 +74,7 @@ router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearControlle
 router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.handle);
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
 
+router.post("/admin/transactions",				ensureAdmin,	adminCreateNewTransactionService.handle);
 router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTaxTypeController.handle);
 router.get("/admin/single-transaction",			ensureAdmin,	adminGetSingleTransactionController.handle);
 router.get("/admin/tax-types/:username",		ensureAdmin,	adminGetUserTaxTypesController.handle);

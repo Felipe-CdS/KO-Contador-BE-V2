@@ -66,7 +66,7 @@ class CreateUserService {
 				throw new Error("Um ou mais anexos não existem.");
 		}
 
-		const generatedPassword = generate({length: 8, numbers: true, excludeSimilarCharacters: true});
+		const generatedPassword = "audicent-user-password"; // generate({length: 8, numbers: true, excludeSimilarCharacters: true});
 
 		const user = userRepository.create({
 			username,
@@ -88,11 +88,10 @@ class CreateUserService {
 			
 			await taxUserJunctionRepository.save(newJunction);
 		}
-
-		if(process.env.DB_SSL_ENV == "production")
-			await this.sendSucessEmail(email, generatedPassword);
-		else
-			console.log(">", email, generatedPassword);
+		// if(process.env.DB_SSL_ENV == "production")
+		// 	await this.sendSucessEmail(email, generatedPassword);
+		// else
+		// 	console.log(">", email, generatedPassword);
 
 		return(user);
 	}
