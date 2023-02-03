@@ -4,9 +4,11 @@ import { CreateNewInsurerService } from "../../services/Insurer/CreateNewInsurer
 class CreateNewInsurerController {
 	async handle(request: Request, response: Response){
 		
+		const { insurer_name } = request.body;
+		
         const service = new CreateNewInsurerService();
         
-        const newInsurer = await service.execute(request.query.insurer_name as string);
+        const newInsurer = await service.execute(insurer_name);
 
         return response.json({insurer_name: newInsurer.insurer_name});
 	}

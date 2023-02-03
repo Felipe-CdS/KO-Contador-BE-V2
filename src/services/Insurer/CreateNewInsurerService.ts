@@ -3,7 +3,7 @@ import { InsurerRepositories } from "../../repositories/InsurerRepositories";
 
 class CreateNewInsurerService {
 
-	async execute(insurer_name: string){
+	async execute(insurer_name){
 		
 		const repository = getCustomRepository(InsurerRepositories);
 

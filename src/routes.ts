@@ -76,7 +76,7 @@ router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTax
 router.get("/admin/single-transaction",			ensureAdmin,	adminGetSingleTransactionController.handle);
 router.get("/admin/tax-types/:username",		ensureAdmin,	adminGetUserTaxTypesController.handle);
 
-router.post("/insurers",						ensureAdmin,	createNewInsurerController.handle);
+router.post("/insurers",						ensureAuth,		createNewInsurerController.handle);
 router.get("/insurers",							ensureAdmin,	getAllInsurersController.handle);
 router.delete("/insurers",						ensureAdmin,	deleteInsurerController.handle);
 
