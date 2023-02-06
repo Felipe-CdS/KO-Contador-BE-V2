@@ -1,5 +1,4 @@
 import { Between, getCustomRepository } from "typeorm";
-import { User } from "../../entities/User";
 import { TransactionRepositories } from "../../repositories/TransactionRepositories";
 import { UserRepositories } from "../../repositories/UserRepositories";
 
@@ -19,6 +18,9 @@ class GetUserNextAvaiableTransactionService {
 			order: { transaction_date: 'DESC' }
 		});
 
+		if(ordered.length == 0)
+			return null;
+
 		var mostRecentOnType = null;
 
 		for(let i = 0; i < ordered.length; i++)
@@ -31,13 +33,21 @@ class GetUserNextAvaiableTransactionService {
 			}
 		}
 
+		if(mostRecentOnType == null)
+			return null;
+
 		var mostRecentTxDate = new Date(mostRecentOnType.transaction_date);
 
 		if((mostRecentTxDate.getMonth() != 11))
-			var nextDateAvaiable = new Date(`${mostRecentTxDate.getFullYear()}-${mostRecentTxDate.getMonth() + 1}-15T03:24:00`);
+		{
+			if((mostRecentTxDate.getMonth() + 1) < 9)
+				var formatMonth = "0" + ((mostRecentTxDate.getMonth() + 2).toString());
+			else
+				var formatMonth = ((mostRecentTxDate.getMonth() + 2).toString());
+			var nextDateAvaiable = new Date(`${mostRecentTxDate.getFullYear()}-${formatMonth}-15T03:24:00`);
+		}
 		else
 			var nextDateAvaiable = new Date(`${mostRecentTxDate.getFullYear() + 1}-01-15T03:24:00`);
-
 
 		return ({mostRecentOnType, nextDateAvaiable});
 	}

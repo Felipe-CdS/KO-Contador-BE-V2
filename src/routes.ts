@@ -75,7 +75,7 @@ router.post("/transactions",					ensureAuth,		createNewTransactionController.han
 router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearController.handle);
 router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.handle);
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
-router.get("/next-avaiable",					ensureAdmin,	getUserNextAvaiableTransactionController.handle);
+router.get("/next-avaiable",					ensureAuth,		getUserNextAvaiableTransactionController.handle);
 
 router.post("/admin/transactions",				ensureAdmin,	adminCreateNewTransactionService.handle);
 router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTaxTypeController.handle);
