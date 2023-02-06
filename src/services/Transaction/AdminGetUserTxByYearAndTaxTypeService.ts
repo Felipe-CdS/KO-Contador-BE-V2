@@ -32,9 +32,8 @@ class AdminGetUserTxByYearAndTaxTypeService {
 
 		var returnArray = {};
 
-		for(let i = 0; i < 12; i++){
-			returnArray[`month_${i+1}`] = null;
-		}
+		for(let i = 1; i < 13; i++)
+			returnArray[`month_${i}`] = null;
 
 		for(let i = 0; i < 12; i++){
 			if(transactions_search[i])
