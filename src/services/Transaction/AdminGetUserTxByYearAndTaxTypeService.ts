@@ -33,7 +33,10 @@ class AdminGetUserTxByYearAndTaxTypeService {
 		var returnArray = {};
 
 		for(let i = 0; i < 12; i++){
+			returnArray[`month_${i+1}`] = null;
+		}
 
+		for(let i = 0; i < 12; i++){
 			if(transactions_search[i])
 			{
 				let holder = {
@@ -45,15 +48,13 @@ class AdminGetUserTxByYearAndTaxTypeService {
 				delete holder.fk_tax_id;
 				delete holder.fk_user_id;
 				delete holder.transaction_id;
+				
+				let month_number = new Date(holder.transaction_date).getMonth();
 	
 				if(holder.transaction_date < (new Date(`${year}-12-31  23:59:59.0000`)))
-					returnArray[`month_${i+1}`] = holder;
+					returnArray[`month_${month_number + 1}`] = holder;
 			}
-			else
-			{
-				returnArray[`month_${i+1}`] = null;
-			}
-		}
+		}	
 
         return (returnArray);
     }
