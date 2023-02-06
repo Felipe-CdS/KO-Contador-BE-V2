@@ -13,6 +13,7 @@ import { CreateNewTransactionController } from "./controllers/Transaction/Create
 import { GetSingleTransactionController } from "./controllers/Transaction/GetSingleTransactionController";
 import { GetTransactionsByYearController } from "./controllers/Transaction/GetTransactionsByYearController";
 import { GetTxByYearAndTaxTypeController } from "./controllers/Transaction/GetTxByYearAndTaxTypeController";
+import { GetUserNextAvaiableTransactionController } from "./controllers/Transaction/GetUserNextAvaiableTransactionController";
 import { AdminGetUserTaxTypesController } from "./controllers/User/AdminGetUserTaxTypes";
 import { CreateUserController } from "./controllers/User/CreateUserController";
 import { DeleteUserController } from "./controllers/User/DeleteUserController";
@@ -45,6 +46,7 @@ const createNewTransactionController 			= new CreateNewTransactionController();
 const getTransactionsByYearController			= new GetTransactionsByYearController();
 const getSingleTransactionController			= new GetSingleTransactionController();
 const getTxByYearAndTaxTypeController			= new GetTxByYearAndTaxTypeController();
+const getUserNextAvaiableTransactionController	= new GetUserNextAvaiableTransactionController();
 
 const adminGetUserTaxTypesController			= new AdminGetUserTaxTypesController();
 const adminCreateNewTransactionService			= new AdminCreateNewTransactionController();
@@ -73,6 +75,7 @@ router.post("/transactions",					ensureAuth,		createNewTransactionController.han
 router.get("/transactions/:year",				ensureAuth,		getTransactionsByYearController.handle);
 router.get("/transactions",						ensureAuth,		getTxByYearAndTaxTypeController.handle);
 router.get("/single-transaction",				ensureAuth,		getSingleTransactionController.handle);
+router.get("/most-recent",						ensureAdmin,	getUserNextAvaiableTransactionController.handle);
 
 router.post("/admin/transactions",				ensureAdmin,	adminCreateNewTransactionService.handle);
 router.get("/admin/user-transactions",			ensureAdmin,	adminGetUserTxByYearAndTaxTypeController.handle);
