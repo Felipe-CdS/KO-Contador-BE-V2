@@ -3,6 +3,7 @@ import { sign } from "jsonwebtoken";
 import { UserRepositories } from "../../repositories/UserRepositories";
 import { User } from "../../entities/User";
 import { TaxUserJunctionRepositories } from "../../repositories/TaxUserJunctionRepositories";
+import { TaxTableRepositories } from "../../repositories/TaxTableRepositories";
 
 interface IAuthRequest {
     email: "string";
@@ -13,6 +14,7 @@ class LoginUserService {
     async execute({ email, password }: IAuthRequest){
         const userRepository		= getCustomRepository(UserRepositories);
 		const junctionRepository	= getCustomRepository(TaxUserJunctionRepositories);
+		const taxTableRepository = getCustomRepository(TaxTableRepositories);
 
         const user = await userRepository.findOne({ email });
 
@@ -34,7 +36,14 @@ class LoginUserService {
             taxTypes.push(userTaxJunctions[i].fk_table_id.number_identifier);
 		
 		if(user.admin)
-			return ({token, role: true, username: user.username, taxTypes: []});
+		{
+			var holder = [];
+			var allTaxTables = await taxTableRepository.find();
+			
+			allTaxTables.map(elem => {holder.push(elem.number_identifier)});
+			return ({token, role: true, username: user.username, taxTypes: holder});
+		}
+			
 		
 		return ({token, username: user.username, taxTypes});
     }
