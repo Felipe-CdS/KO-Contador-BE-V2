@@ -80,17 +80,20 @@ class AdminCreateNewTransactionService {
 		var rangeRow = null as ITaxRow;
 		var repatitionRange = null as IRepartitionTable;
 
-		(taxTable.rows).map((elem) => {
+		for(let i = 0; i < (taxTable.rows).length; i++)
+		{
+			let elem =  taxTable.rows[i];
 			if(rbt_12 >= elem.min_value && rbt_12 < elem.max_value)
+			{
 				rangeRow = elem;
-		});
+				break;
+			}				
+		}
 
 		(taxTable.repartition_table).map((elem) => {
 			if(elem.range == rangeRow.range)
 				repatitionRange = elem;
 		});
-
-
 
 		return repatitionRange.ISS;
 	}
@@ -150,7 +153,7 @@ class AdminCreateNewTransactionService {
 		const effective_tax_percentage			= await this.getEffectiveTaxPercentage(taxTable, rbt_12);
 		const repartition_table_iss_percentage	= await this.getRepartitionTablePercentage(taxTable, rbt_12);
 
-		if(!rbt_12 || !repartition_table_iss_percentage)
+		if(rbt_12 == null || !repartition_table_iss_percentage)
 			throw new Error("Parece que a conta ultrapassou as faixas do Simples Nacional.");
 	
 		const tx = {
