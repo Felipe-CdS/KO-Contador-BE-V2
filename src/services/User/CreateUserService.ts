@@ -12,7 +12,7 @@ class CreateUserService {
 		var transporter = createTransport({
 			service: 'gmail',
 			auth: {
-			  user: 'coutinho.felipe66@gmail.com',
+			  user: 'test_test@gmail.com',
 			  pass: 'scumzfhcqifykqow'
 			}
 		  });
@@ -20,7 +20,7 @@ class CreateUserService {
 		  var mailOptions = {
 			from: {
 				name: 'KO Contador Testes',
-				address: 'coutinho.felipe66@gmail.com'
+				address: 'test_test@gmail.com'
 			},
 			to: email,
 			subject: 'Conta cadastrada com sucesso no sistema de Simples Nacional!',
@@ -66,7 +66,7 @@ class CreateUserService {
 				throw new Error("Um ou mais anexos não existem.");
 		}
 
-		const generatedPassword = "audicent-user-password"; // generate({length: 8, numbers: true, excludeSimilarCharacters: true});
+		const generatedPassword = "audicent"; // generate({length: 8, numbers: true, excludeSimilarCharacters: true});
 
 		const user = userRepository.create({
 			username,

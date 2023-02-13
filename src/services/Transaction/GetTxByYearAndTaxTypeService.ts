@@ -1,4 +1,4 @@
-import { getCustomRepository, LessThan, MoreThan } from "typeorm"
+import { Between, getCustomRepository, LessThan, MoreThan } from "typeorm"
 import { Transaction } from "../../entities/Transaction";
 import { TransactionRepositories } from "../../repositories/TransactionRepositories";
 
@@ -10,7 +10,7 @@ class GetTxByYearAndTaxTypeService {
         var transactions_search = await transactionRepository.find({
 				where: { 
 					fk_user_id: user_id,
-					transaction_date:  MoreThan(`${year}-01-01  00:00:00.00000`)
+					transaction_date:  Between(`${year}-01-01  00:00:00.00000`, `${year}-12-31  23:59:59.99999`)
 				},
 				take: 12
 		});
@@ -25,28 +25,23 @@ class GetTxByYearAndTaxTypeService {
 
 		var returnArray = {};
 
-		for(let i = 0; i < 12; i++){
+		for(let i = 1; i < 13; i++)
+			returnArray[`month_${i}`] = {pending: true, blocked: true};
 
-			if(transactions_search[i])
-			{
-				let holder = {
-					...transactions_search[i],
-					tax_identifier: transactions_search[i].fk_tax_id.number_identifier,
-					username:		transactions_search[i].fk_user_id.username
-				};
-	
-				delete holder.fk_tax_id;
-				delete holder.fk_user_id;
-				delete holder.transaction_id;
-	
-				if(holder.transaction_date < (new Date(`${year}-12-31  23:59:59.0000`)))
-					returnArray[`month_${i+1}`] = holder;
-			}
-			else
-			{
-				returnArray[`month_${i+1}`] = null;
-			}
-		}
+		(transactions_search).map((elem) => {
+			let holder = {
+						...elem,
+						tax_identifier: elem.fk_tax_id.number_identifier,
+						username:		elem.fk_user_id.username
+					};
+		
+					delete holder.fk_tax_id;
+					delete holder.fk_user_id;
+					delete holder.transaction_id;
+					
+					let month_number = new Date(holder.transaction_date).getMonth();
+					returnArray[`month_${month_number + 1}`] = holder;
+		});
 
         return (returnArray);
     }
