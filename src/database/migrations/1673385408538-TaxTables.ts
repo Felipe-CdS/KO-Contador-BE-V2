@@ -15,26 +15,6 @@ export class TaxTables1673385408538 implements MigrationInterface {
 				{ name: "repartition_table", type: "jsonb"}
 			]
 		}));
-
-		// let holder = [taxType1, taxType2, taxType3, taxType4, taxType5];
-
-		// for(let i = 0; i < holder.length; i++)
-		// {
-		// 	let elem = holder[i];
-
-		// 	await queryRunner
-		// 		.manager
-		// 		.createQueryBuilder()
-		// 		.insert()
-		// 		.into("tax_tables")
-		// 		.values(
-		// 			{
-		// 				table_id: uuid(),
-		// 				...elem
-		// 			}
-		// 		)
-		// 		.execute();
-		// }		
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

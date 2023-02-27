@@ -22,8 +22,7 @@ export class UserTables1673414880150 implements MigrationInterface {
 		}));
 
 		let hashAdminPassword	= await hash(process.env.ADMIN_PASSWORD, 12);
-		let hashUserPassword	= await hash(process.env.USER_PASSWORD, 12);
-
+		
 		await queryRunner
 			.manager
 			.createQueryBuilder()
@@ -36,21 +35,6 @@ export class UserTables1673414880150 implements MigrationInterface {
 					password: hashAdminPassword,
 					email: process.env.ADMIN_EMAIL,
 					admin: true
-				}
-			)
-			.execute();
-
-		await queryRunner
-			.manager
-			.createQueryBuilder()
-			.insert()
-			.into("users")
-			.values(
-				{
-					user_id: uuid(),
-					username: "USER",
-					password: hashUserPassword,
-					email: process.env.USER_EMAIL
 				}
 			)
 			.execute();
